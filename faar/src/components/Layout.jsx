@@ -31,10 +31,23 @@ const Layout = () => {
     const fetchUserData = async () => {
       try {
         const API_BASE_URL = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${API_BASE_URL}/api/v1/users/current-user`);
+        const token = localStorage.getItem('token');
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+        
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        };
+        
+        const response = await axios.get(`${API_BASE_URL}/api/v1/users/current-user`, config);
         setUser(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);
+        localStorage.removeItem('token');
         navigate('/login');
       }
     };
@@ -84,12 +97,28 @@ const Layout = () => {
   const handleLogout = async () => {
     try {
       const API_BASE_URL = import.meta.env.VITE_API_URL;
-      await axios.post(`${API_BASE_URL}/api/v1/users/logout`);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      await axios.post(`${API_BASE_URL}/api/v1/users/logout`, {}, config);
+      localStorage.removeItem('token');
       setUser(null);
       navigate('/');
       closeSidebar();
     } catch (error) {
       console.error('Logout failed:', error);
+      localStorage.removeItem('token');
+      setUser(null);
+      navigate('/login');
     }
   };
 

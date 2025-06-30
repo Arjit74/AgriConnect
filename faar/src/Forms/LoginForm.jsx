@@ -25,8 +25,13 @@ const LoginForm = () => {
     setStatus('');
     try {
       const API_BASE_URL = import.meta.env.VITE_API_URL;
-      const res = await axios.post(`${API_BASE_URL}/api/v1/users/login`, formData);
-      console.log('Login successful:', res.data);
+      const response = await axios.post(`${API_BASE_URL}/api/v1/users/login`, formData);
+      console.log('Login successful:', response.data);
+
+      // Store token if returned in response
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+      }
 
       setStatus('Login successful! Redirecting...');
       setTimeout(() => {

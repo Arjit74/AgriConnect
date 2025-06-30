@@ -44,6 +44,12 @@ const UserForm = () => {
       const response = await axios.post(`${API_BASE_URL}/api/v1/users/register`, formData);
 
       console.log(response);
+
+      // Store token if returned in response
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+      }
+
       setStatus('Registration successful! Redirecting to login...');
       setTimeout(() => {
         navigate('/login');
