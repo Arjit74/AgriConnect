@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
 
 export default defineConfig({
-  base: '/', // ✅ deploy at root
+  base: '/', 
   server: {
     proxy: {
       '/api': 'http://localhost:8000'
@@ -12,8 +14,8 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [
-        require('tailwindcss'),
-        require('autoprefixer')
+        tailwindcss,
+        autoprefixer
       ]
     }
   },
