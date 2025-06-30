@@ -49,8 +49,11 @@ const UserForm = () => {
         navigate('/login');
       }, 1500);
     } catch (err) {
+      console.error('Registration error:', err);
       if (err.response && err.response.data && err.response.data.message) {
         setStatus(`Registration failed: ${err.response.data.message}`);
+      } else if (err.message) {
+        setStatus(`Registration failed: ${err.message}`);
       } else {
         setStatus('Registration failed. Please try again.');
       }

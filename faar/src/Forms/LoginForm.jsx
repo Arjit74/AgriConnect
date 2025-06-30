@@ -24,7 +24,8 @@ const LoginForm = () => {
     setLoading(true);
     setStatus('');
     try {
-      const res = await axios.post('/api/v1/users/login', formData);
+      const API_BASE_URL = import.meta.env.VITE_API_URL;
+      const res = await axios.post(`${API_BASE_URL}/api/v1/users/login`, formData);
       console.log('Login successful:', res.data);
 
       setStatus('Login successful! Redirecting...');
