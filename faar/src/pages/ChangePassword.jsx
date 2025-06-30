@@ -16,7 +16,7 @@ function ChangePassword() {
     setError("");
 
     try {
-      const res = await axios.post("/api/v1/users/change-password", { oldPassword, newPassword });
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/change-password`, { oldPassword, newPassword });
       setSuccessMsg(res.data.message || "Password changed successfully!");
       setOldPassword("");
       setNewPassword("");

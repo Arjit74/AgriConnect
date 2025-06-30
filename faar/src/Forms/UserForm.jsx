@@ -40,7 +40,7 @@ const UserForm = () => {
     setLoading(true);
     setStatus('');
     try {
-      const response = await axios.post('/api/v1/users/register', formData);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/register`, formData);
 
       console.log(response);
       setStatus('Registration successful! Redirecting to login...');

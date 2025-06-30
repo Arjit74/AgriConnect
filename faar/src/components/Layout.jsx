@@ -68,7 +68,7 @@ const Layout = () => {
   const handleLogout = async () => {
     try {
       // Assuming you have an axios instance set up or a direct logout endpoint
-      await axios.post('/api/v1/users/logout');
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/logout`);
       navigate('/');
       closeSidebar();
     } catch (error) {
