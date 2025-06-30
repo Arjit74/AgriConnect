@@ -15,7 +15,10 @@ export default defineConfig({
     postcss: {
       plugins: [
         tailwindcss({
-          config: './tailwind.config.js'
+          config: './tailwind.config.js',
+          corePlugins: {
+            preflight: false
+          }
         }),
         autoprefixer
       ]
@@ -35,6 +38,9 @@ export default defineConfig({
           return
         }
         warn(warning)
+      },
+      treeshake: {
+        moduleSideEffects: 'no-external'
       }
     }
   }
