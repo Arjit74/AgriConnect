@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom';
-import LeftBar from './components/Layout';
+import LeftBar from './components/Layout.jsx';
 function App() {
   return (
     <div className="min-h-screen flex flex-wrap content-between bg-gray-500"> {/* This outer div is redundant */}
