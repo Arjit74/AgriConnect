@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/faar/' : '/',
@@ -9,14 +8,22 @@ export default defineConfig({
       '/api': "http://localhost:8000"
     }
   },
-  plugins: [react(), tailwindcss()],
+  plugins: [react()],
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
     emptyOutDir: true,
     rollupOptions: {
-      input: {
-        main: './index.html'
+      input: 'index.html',
+      external: ['react-router-dom', 'motion-utils', 'motion-dom'],
+      onwarn: (warning, warn) => {
+        if (warning.code === 'UNRESOLVED_IMPORT' && 
+            (warning.source === 'react-router/dom' || 
+             warning.source === 'motion-utils' ||
+             warning.source === 'motion-dom')) {
+          return;
+        }
+        warn(warning);
       }
     }
   }
