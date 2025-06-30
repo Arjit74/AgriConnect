@@ -1,38 +1,27 @@
 // src/hooks/useWeather.js
-import { useState, useEffect } from "react";
-import axios from "axios";
-import config from "../config/config.js"
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-export default function useWeather({ state, city }) {
-  const [weather, setWeather] = useState(null);
+export function useWeather() {
+  const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error,   setError]   = useState(null);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (!city || !state) return; // wait until we have a city
+  const fetchWeather = async (lat, lon) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const API_BASE_URL = import.meta.env.VITE_API_URL;
+      const url = `${API_BASE_URL}/api/v1/weather?lat=${lat}&lon=${lon}`;
+      const res = await axios.get(url);
+      setWeatherData(res.data);
+    } catch (err) {
+      setError(err.message);
+      console.error('Weather fetch error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const fetchWeather = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const apiKey = config.weatherAPIkey;  // store your key in .env
-        
-        const q = encodeURIComponent(`${city},${state},IN`);
-        console.log(q)
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${q}&units=metric&appid=${apiKey}`;
-
-        const res = await axios.get(url);
-        setWeather(res.data);
-      } catch (err) {
-        setError(err.response?.data?.message || err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWeather();
-  }, [state, city]);
-
-  return { weather, loading, error };
+  return { weatherData, loading, error, fetchWeather };
 }

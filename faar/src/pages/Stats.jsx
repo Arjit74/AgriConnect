@@ -26,9 +26,10 @@ function Stats() {
             setLoading(true); // Set loading to true before fetching
             setError(null); // Clear any previous errors
             try {
-                const response = await axios.get(`/api/v1/crop/stats/${cropName}`);
+                const API_BASE_URL = import.meta.env.VITE_API_URL;
+                const response = await axios.get(`${API_BASE_URL}/api/v1/crop/stats/${cropName}`);
 
-                const updatedPrices = response.data.data
+                const updatedPrices = response.data.prices
                     .map(item => ({
                         username: item.username,
                         price: item.price === 0 ? crop_prices[cropName] : item.price

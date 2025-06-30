@@ -12,11 +12,12 @@ function ChangePassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccessMsg("");
-    setError("");
+    setError('');
+    setSuccessMsg('');
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/change-password`, { oldPassword, newPassword });
+      const API_BASE_URL = import.meta.env.VITE_API_URL;
+      const res = await axios.post(`${API_BASE_URL}/api/v1/users/change-password`, { oldPassword, newPassword });
       setSuccessMsg(res.data.message || "Password changed successfully!");
       setOldPassword("");
       setNewPassword("");
@@ -25,10 +26,12 @@ function ChangePassword() {
         navigate('/profile'); // Navigate back to profile page after success
       }, 1500); // Increased timeout slightly for better user experience
     } catch (err) {
-      console.error("Error changing password:", err);
-      // More robust error handling for backend messages
-      const backendError = err.response?.data?.message || err.response?.data?.error || err.response?.data?.user?.error || "Failed to change password. Please check your old password.";
-      setError(backendError);
+      console.error('Change password failed:', err);
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Failed to change password. Please try again.');
+      }
     }
   };
 

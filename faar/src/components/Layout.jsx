@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,6 +17,7 @@ import {
 
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,6 +26,21 @@ const Layout = () => {
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const closeSidebar = () => setIsSidebarOpen(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const API_BASE_URL = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${API_BASE_URL}/api/v1/users/current-user`);
+        setUser(response.data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        navigate('/login');
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   const navLinks = [
     { to: '/home', name: 'Home', icon: <FaHome size={20} className="text-blue-400 group-hover:text-white" /> },
@@ -67,13 +83,13 @@ const Layout = () => {
 
   const handleLogout = async () => {
     try {
-      // Assuming you have an axios instance set up or a direct logout endpoint
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/logout`);
+      const API_BASE_URL = import.meta.env.VITE_API_URL;
+      await axios.post(`${API_BASE_URL}/api/v1/users/logout`);
+      setUser(null);
       navigate('/');
       closeSidebar();
     } catch (error) {
-      console.error("Logout failed:", error);
-      navigate('/'); // Still navigate to home on error for state reset
+      console.error('Logout failed:', error);
     }
   };
 
@@ -127,7 +143,7 @@ const Layout = () => {
               Agri-Connect
             </div>
 
-            <nav className="mt-8 flex-grow **overflow-y-auto** no-scrollbar"> {/* Keep this for internal sidebar scrolling if needed */}
+            <nav className="mt-8 flex-grow overflow-y-auto no-scrollbar"> {/* Keep this for internal sidebar scrolling if needed */}
               <ul className="space-y-2">
                 {navLinks.map((link, index) => (
                   <motion.li
@@ -171,7 +187,7 @@ const Layout = () => {
 
       {/* Main Content Area */}
       <main
-        className={`flex-1 min-h-screen **overflow-hidden** p-6 flex flex-col items-center justify-center transition-all duration-300 ease-in-out
+        className={`flex-1 min-h-screen overflow-hidden p-6 flex flex-col items-center justify-center transition-all duration-300 ease-in-out
           ${!hideSidebar && isSidebarOpen ? 'ml-64' : 'ml-0'}`}
       >
         <Outlet />

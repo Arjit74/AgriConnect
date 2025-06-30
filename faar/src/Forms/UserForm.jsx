@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion'; // Import motion from Framer Motion
+import { motion } from 'framer-motion';
 import StateCitySelector from '../components/StateCitySelector';
 
 const UserForm = () => {
@@ -40,7 +40,8 @@ const UserForm = () => {
     setLoading(true);
     setStatus('');
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/register`, formData);
+      const API_BASE_URL = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${API_BASE_URL}/api/v1/users/register`, formData);
 
       console.log(response);
       setStatus('Registration successful! Redirecting to login...');
@@ -183,7 +184,7 @@ const UserForm = () => {
               onChange={handleChange}
               className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-3 focus:ring-green-500 focus:border-green-500 transition duration-200 text-lg appearance-none bg-white pr-8 text-gray-700"
               disabled={loading}
-              required // Made gender required
+              required
             >
               <option value="" disabled>
                 Select Gender

@@ -79,7 +79,8 @@ const CropPrices = () => {
   useEffect(() => {
     const fetchUserLocation = async () => {
       try {
-        const res = await axios.get("/api/v1/users/current-user");
+        const API_BASE_URL = import.meta.env.VITE_API_URL;
+        const res = await axios.get(`${API_BASE_URL}/api/v1/users/current-user`);
         const {
           city: userCity,
           state: userState,
@@ -104,7 +105,8 @@ const CropPrices = () => {
     const fetchUpdatedPrice = async () => {
       setInitialLoadLoading(true);
       try {
-        const res = await axios.get(`/api/v1/crop/prices/${username}`);
+        const API_BASE_URL = import.meta.env.VITE_API_URL;
+        const res = await axios.get(`${API_BASE_URL}/api/v1/crop/prices/${username}`);
         const fetchedData = res.data.data;
         let initialPrices = { ...crop_prices };
         fetchedData.forEach((item) => {
