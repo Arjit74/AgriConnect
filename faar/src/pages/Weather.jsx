@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import useWeather from "../utility/GetWeather.js"; // Assuming this hook exists and works
+import { useWeather } from "../utility/GetWeather.js"; // Assuming this hook exists and works
 import axios from "axios";
 import { motion } from "framer-motion"; // Import motion from framer-motion
 
@@ -111,7 +111,7 @@ export default function WeatherFetcher() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M17.657 16.727A8 8 0 016.343 7.273L17.657 16.727zm0 0l-1.55-1.55a.5.5 0 01-.137-.32l.09-.597c.01-.067.002-.134-.015-.201l-2.073-2.073a.5.5 0 01-.09-.137c-.067-.01-.134-.002-.201.015l-.597.09c-.067.01-.134-.002-.201-.015l-2.073-2.073a.5.5 0 01-.09-.137c-.067-.01-.134-.002-.201.015l-.597.09c-.067.01-.134-.002-.201-.015l-2.073-2.073a.5.5 0 01-.137-.09c-.01-.067-.002-.134.015-.201l.09-.597c.01-.067.002-.134-.015-.201L6.343 7.273A8 8 0 0117.657 16.727z"
+                  d="M17.657 16.727A8 8 0 016.343 7.273L17.657 16.727zm0 0l-1.55-1.55a.5.5 0 01-.137-.32l.09-.597c.01-.067.002-.134-.015-.201l-2.073-2.073a.5.5 0 01-.09-.137c-.067-.01-.134-.002-.201.015l-.597.09c-.067.01-.134-.002-.201-.015l-2.073-2.073a.5.5 0 01-.137-.09c-.01-.067-.002-.134.015-.201l.09-.597c.01-.067.002-.134-.015-.201L6.343 7.273A8 8 0 0117.657 16.727z"
                 />
               </svg>
               {weather.name}, {location.state}
