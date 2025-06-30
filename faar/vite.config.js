@@ -15,7 +15,6 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: 'index.html',
-      external: ['react-router-dom', 'motion-utils', 'motion-dom'],
       onwarn: (warning, warn) => {
         if (warning.code === 'UNRESOLVED_IMPORT' && 
             (warning.source === 'react-router/dom' || 
