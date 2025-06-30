@@ -39,25 +39,72 @@ const UserForm = () => {
     e.preventDefault();
     setLoading(true);
     setStatus('');
+
+    // Validate essential fields
+    if (!formData.username || !formData.email || !formData.password || !formData.role) {
+      setStatus('Please fill in username, email, password, and role');
+      setLoading(false);
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setStatus('Please enter a valid email address');
+      setLoading(false);
+      return;
+    }
+
+    // Validate password length
+    if (formData.password.length < 6) {
+      setStatus('Password must be at least 6 characters long');
+      setLoading(false);
+      return;
+    }
+
+    // Prepare only the essential fields for backend
+    const trimmedPayload = {
+      username: formData.username.toLowerCase(),
+      email: formData.email.toLowerCase(),
+      password: formData.password,
+      role: formData.role
+    };
+
     try {
       const API_BASE_URL = import.meta.env.VITE_API_URL;
-      const response = await axios.post(`${API_BASE_URL}/api/v1/users/register`, formData);
-
-      console.log(response);
-
+      console.log('Submitting form data:', trimmedPayload); // Debug log
+      
+      const response = await axios.post(`${API_BASE_URL}/api/v1/users/register`, trimmedPayload);
+      
+      console.log('Registration response:', response.data);
+      
       // Store token if returned in response
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
       }
-
+      
       setStatus('Registration successful! Redirecting to login...');
       setTimeout(() => {
         navigate('/login');
       }, 1500);
     } catch (err) {
-      console.error('Registration error:', err);
-      if (err.response && err.response.data && err.response.data.message) {
-        setStatus(`Registration failed: ${err.response.data.message}`);
+      console.error('Full registration error details:', {
+        error: err,
+        response: err.response,
+        data: err.response?.data,
+        status: err.response?.status
+      });
+      
+      if (err.response) {
+        if (err.response.status === 400) {
+          if (err.response.data && err.response.data.message) {
+            setStatus(`Registration failed: ${err.response.data.message}`);
+          } else {
+            setStatus('Registration failed: Bad request. Please check your input.');
+          }
+        } else {
+          setStatus(`Registration failed: ${err.response.data?.message || 'Unknown error'}`);
+        }
       } else if (err.message) {
         setStatus(`Registration failed: ${err.message}`);
       } else {
