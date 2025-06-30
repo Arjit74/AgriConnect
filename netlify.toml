@@ -1,12 +1,12 @@
 [build]
   base = "faar"
   command = "npm run build"
-  publish = "dist"  # Changed from "faar/dist"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
 
 [[redirects]]
   from = "/*"
   to = "/faar/index.html"
   status = 200
-
-[build.environment]
-  NODE_VERSION = "18"
